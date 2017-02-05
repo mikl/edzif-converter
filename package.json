@@ -1,0 +1,33 @@
+{
+  "name": "edzif-converter",
+  "version": "1.0.0-beta.1",
+  "description": "Library to format DNS zones in EDZIF format into formats usable with other systems.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -e js,json --verbose --exec npm run test",
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "test": "lab --coverage --threshold 100"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikl/edzif-converter.git"
+  },
+  "keywords": [
+    "edzif"
+  ],
+  "author": "Mikkel Hoegh <mikkel@hoegh.org> (http://mikkel.hoegh.org/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikl/edzif-converter/issues"
+  },
+  "homepage": "https://github.com/mikl/edzif-converter#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "code": "^4.0.0",
+    "eslint": "^3.12.2",
+    "lab": "^12.0.0",
+    "nodemon": "^1.11.0",
+    "standard": "^8.6.0"
+  }
+}
