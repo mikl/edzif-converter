@@ -39,10 +39,10 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('NS record (ns1)', (done) => {
-    const output = records.NS('@', 'ns1.example.net')
+    const output = records.NS('@', 19999, 'ns1.example.net')
 
     Code.expect(output).to.be.a.string()
-    Code.expect(output).to.equal('@ IN NS ns1.example.net')
+    Code.expect(output).to.equal('@ 19999 IN NS ns1.example.net')
     done()
   })
 

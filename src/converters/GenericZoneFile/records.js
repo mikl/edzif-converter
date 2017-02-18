@@ -16,8 +16,8 @@ function MX (prefix, ttl, priority, hostname) {
   return `${prefix} ${ttl} MX ${priority} ${hostname}`
 }
 
-function NS (prefix, hostname) {
-  return `${prefix} IN NS ${hostname}`
+function NS (prefix, ttl, hostname) {
+  return `${prefix} ${ttl} IN NS ${hostname}`
 }
 
 function SOA (nameserver, contact, serial, refresh, retry, expire, ttl) {
