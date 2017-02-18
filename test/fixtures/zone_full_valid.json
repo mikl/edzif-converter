@@ -1,0 +1,92 @@
+{
+  "name": "example.com",
+  "records": [
+    {
+      "id": 42,
+      "zone_name": "example.com",
+      "record_type": "A",
+      "ttl": 43200,
+      "address": "192.168.1.42"
+    },
+    {
+      "id": 42,
+      "zone_name": "kvajpande.example.com",
+      "record_type": "A",
+      "ttl": 43200,
+      "address": "10.0.0.1"
+    },
+    {
+      "id": 42,
+      "zone_name": "example.com",
+      "record_type": "AAAA",
+      "ttl": 43200,
+      "address": "::1"
+    },
+    {
+      "id": 4434392,
+      "prefix": "www",
+      "zone_name": "example.com",
+      "record_type": "CNAME",
+      "ttl": 43200,
+      "name": "example.com"
+    },
+    {
+      "zone_name": "example.com",
+      "record_type": "MX",
+      "ttl": 43200,
+      "name": "mail.example.com",
+      "priority": 10
+    },
+    {
+      "id": 142,
+      "zone_name": "example.com",
+      "record_type": "NS",
+      "ttl": 43200,
+      "name": "ns1.example.com"
+    },
+    {
+      "id": 143,
+      "zone_name": "example.com",
+      "record_type": "NS",
+      "ttl": 43200,
+      "name": "ns2.example.com"
+    },
+    {
+      "name": "example.com",
+      "record_type": "SOA",
+      "ttl": 43200,
+      "primary_server": "ns1.example.com",
+      "responsible_person": "zonemaster.example.com",
+      "serial": 2016062942,
+      "refresh": 10,
+      "retry": 10,
+      "expire": 10,
+      "minimum_ttl": 10
+    },
+    {
+      "prefix": "_submission._tcp",
+      "zone_name": "example.com",
+      "record_type": "SRV",
+      "ttl": 43200,
+      "name": "mail.example.com",
+      "port": 587,
+      "priority": 10
+    },
+    {
+      "id": 443,
+      "prefix": "_dmarc",
+      "zone_name": "example.com",
+      "record_type": "TXT",
+      "ttl": 43200,
+      "text_content": "v=DMARC1; p=reject"
+    },
+    {
+      "id": 942,
+      "prefix": "mail._domainkey",
+      "zone_name": "example.com",
+      "record_type": "TXT",
+      "ttl": 43200,
+      "text_content": "v=DKIM1; k=rsa; s=email; p=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaa+blazzlefrozzleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaa+aaaaaaaaa"
+    }
+  ]
+}
