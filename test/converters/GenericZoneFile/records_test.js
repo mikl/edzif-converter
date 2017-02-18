@@ -70,3 +70,37 @@ lab.experiment('GenericZoneFile records conversion', () => {
     done()
   })
 })
+
+lab.experiment('GenericZoneFile recordsTypeDispatch rendering', () => {
+  lab.test('a TXT record (example.net)', (done) => {
+    const record = {
+      prefix: 'test',
+      record_type: 'TXT',
+      text_content: 'this is a test',
+      ttl: 360
+    }
+    const output = records.recordTypeDispatch(record)
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('test 360 IN TXT ("this is a test")')
+    done()
+  })
+
+  lab.test('an invalid record type', (done) => {
+    const record = {
+      prefix: 'test',
+      record_type: 'BALJEPIS',
+      text_content: 'this is a test',
+      ttl: 360
+    }
+
+    try {
+      const output = records.recordTypeDispatch(record)
+
+      Code.fail('Rendering invalid types should throw an error.')
+    } catch (e) {
+      Code.expect(e.message).to.startWith('EDZIFCONVERR-001')
+      done()
+    }
+  })
+})
