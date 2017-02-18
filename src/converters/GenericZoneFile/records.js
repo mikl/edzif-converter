@@ -20,8 +20,8 @@ function NS (prefix, ttl, hostname) {
   return `${prefix} ${ttl} IN NS ${hostname}`
 }
 
-function SOA (nameserver, contact, serial, refresh, retry, expire, ttl) {
-  return `${nameserver} IN SOA ${contact} (${serial} ${refresh} ${retry} ${expire} ${ttl})`
+function SOA (primary_server, responsible_person, serial, refresh, retry, expire, minimum_ttl) {
+  return `${primary_server} IN SOA ${responsible_person} (${serial} ${refresh} ${retry} ${expire} ${minimum_ttl})`
 }
 
 function SRV (prefix, ttl, weight, priority, port, hostname) {
