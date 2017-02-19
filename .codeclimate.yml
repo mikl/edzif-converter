@@ -6,9 +6,9 @@ engines:
       languages:
       - javascript
   eslint:
-    enabled: false
+    enabled: true
   fixme:
-    enabled: false
+    enabled: true
 ratings:
   paths:
   - "**.js"
