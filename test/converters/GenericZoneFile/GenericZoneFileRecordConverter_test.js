@@ -3,11 +3,13 @@
 const Code = require('code')
 const Lab = require('lab')
 const lab = exports.lab = Lab.script()
-const records = require('../../../src/converters/GenericZoneFile/records')
+const RecordConverter = require('../../../src/converters/GenericZoneFile/GenericZoneFileRecordConverter')
 
 lab.experiment('GenericZoneFile records conversion', () => {
+  const converter = new RecordConverter()
+
   lab.test('A record (localhost)', (done) => {
-    const output = records.A('localhost', 43200, '127.0.0.1')
+    const output = converter.A('localhost', 43200, '127.0.0.1')
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('localhost 43200 IN A 127.0.0.1')
@@ -15,7 +17,7 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('AAAA record (localhost)', (done) => {
-    const output = records.AAAA('localhost', 43200, '2001:db8::ff00:42:8329')
+    const output = converter.AAAA('localhost', 43200, '2001:db8::ff00:42:8329')
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('localhost 43200 IN AAAA 2001:db8::ff00:42:8329')
@@ -23,7 +25,7 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('CNAME record (www)', (done) => {
-    const output = records.CNAME('www', 43200, 'example.net')
+    const output = converter.CNAME('www', 43200, 'example.net')
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('www 43200 CNAME example.net')
@@ -31,7 +33,7 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('MX record (mail)', (done) => {
-    const output = records.MX('@', 43200, 10, 'smtp.example.net')
+    const output = converter.MX('@', 43200, 10, 'smtp.example.net')
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('@ 43200 MX 10 smtp.example.net')
@@ -39,7 +41,7 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('NS record (ns1)', (done) => {
-    const output = records.NS('@', 19999, 'ns1.example.net')
+    const output = converter.NS('@', 19999, 'ns1.example.net')
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('@ 19999 IN NS ns1.example.net')
@@ -47,7 +49,7 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('SOA record (example)', (done) => {
-    const output = records.SOA('ns1.example.net', 'admin.example.net', 1486414023, 3600, 7200, 864000, 3600)
+    const output = converter.SOA('ns1.example.net', 'admin.example.net', 1486414023, 3600, 7200, 864000, 3600)
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('ns1.example.net IN SOA admin.example.net (1486414023 3600 7200 864000 3600)')
@@ -55,7 +57,7 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('SRV record (imap)', (done) => {
-    const output = records.SRV('_imap._tcp.example.net.', 86400, 1, 10, 143, 'imap.example.net.')
+    const output = converter.SRV('_imap._tcp.example.net.', 86400, 1, 10, 143, 'imap.example.net.')
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('_imap._tcp.example.net. 86400 IN SRV 1 10 143 imap.example.net.')
@@ -63,7 +65,7 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('TXT record (SPF)', (done) => {
-    const output = records.TXT('@', 86400, 'v=spf1 mx -all')
+    const output = converter.TXT('@', 86400, 'v=spf1 mx -all')
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('@ 86400 IN TXT ("v=spf1 mx -all")')
@@ -72,6 +74,8 @@ lab.experiment('GenericZoneFile records conversion', () => {
 })
 
 lab.experiment('GenericZoneFile recordsTypeDispatch rendering', () => {
+  const converter = new RecordConverter()
+
   lab.test('a TXT record (example.net)', (done) => {
     const record = {
       prefix: 'test',
@@ -79,7 +83,7 @@ lab.experiment('GenericZoneFile recordsTypeDispatch rendering', () => {
       text_content: 'this is a test',
       ttl: 360
     }
-    const output = records.recordTypeDispatch(record)
+    const output = converter.recordTypeDispatch(record)
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('test 360 IN TXT ("this is a test")')
@@ -95,7 +99,7 @@ lab.experiment('GenericZoneFile recordsTypeDispatch rendering', () => {
     }
 
     try {
-      const output = records.recordTypeDispatch(record)
+      const output = converter.recordTypeDispatch(record)
 
       Code.fail('Rendering invalid types should throw an error.')
     } catch (e) {
