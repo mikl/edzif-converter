@@ -16,6 +16,14 @@ lab.experiment('GenericZoneFile records conversion', () => {
     done()
   })
 
+  lab.test('A record (no TTL)', (done) => {
+    const output = converter.A('evil', null, '8.8.8.8')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('evil IN A 8.8.8.8')
+    done()
+  })
+
   lab.test('AAAA record (localhost)', (done) => {
     const output = converter.AAAA('localhost', 43200, '2001:db8::ff00:42:8329')
 

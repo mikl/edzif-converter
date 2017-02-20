@@ -10,7 +10,7 @@ class GenericZoneFileZoneConverter {
 
     if (zone.records) {
       for (let record of zone.records) {
-        contents.push(this.recordConverter.recordTypeDispatch(record).trim())
+        contents.push(this.recordConverter.recordTypeDispatch(record))
       }
     }
 

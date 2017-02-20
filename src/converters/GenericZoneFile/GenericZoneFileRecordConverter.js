@@ -1,36 +1,28 @@
 'use strict'
 
 class GenericZoneFileRecordConverter {
-  str(input) {
-    if (typeof input === 'string') {
-      return input
-    }
-    else if (typeof input === 'number') {
-      return parseInt(input, 10)
-    }
-    else {
-      return ''
-    }
+  constructor(recordPartConverter) {
+    this.recordPartConverter = recordPartConverter
   }
 
   A(prefix, ttl, address) {
-    return `${prefix} ${ttl} IN A ${address}`
+    return `${this.formatPrefix(prefix, ttl)} IN A ${address}`
   }
 
   AAAA(prefix, ttl, address) {
-    return `${prefix} ${ttl} IN AAAA ${address}`
+    return `${this.formatPrefix(prefix, ttl)} IN AAAA ${address}`
   }
 
   CNAME(prefix, ttl, hostname) {
-    return `${prefix} ${ttl} CNAME ${hostname}`
+    return `${this.formatPrefix(prefix, ttl)} CNAME ${hostname}`
   }
 
   MX(prefix, ttl, priority, hostname) {
-    return `${prefix} ${ttl} MX ${priority} ${hostname}`
+    return `${this.formatPrefix(prefix, ttl)} MX ${priority} ${hostname}`
   }
 
   NS(prefix, ttl, hostname) {
-    return `${prefix} ${ttl} IN NS ${hostname}`
+    return `${this.formatPrefix(prefix, ttl)} IN NS ${hostname}`
   }
 
   SOA(primary_server, responsible_person, serial, refresh, retry, expire, minimum_ttl) {
@@ -38,47 +30,57 @@ class GenericZoneFileRecordConverter {
   }
 
   SRV(prefix, ttl, weight, priority, port, hostname) {
-    return `${prefix} ${ttl} IN SRV ${weight} ${priority} ${port} ${hostname}`
+    return `${this.formatPrefix(prefix, ttl)} IN SRV ${weight} ${priority} ${port} ${hostname}`
   }
 
   TXT(prefix, ttl, content) {
-    return `${prefix} ${ttl} IN TXT ("${content}")`
+    return `${this.formatPrefix(prefix, ttl)} IN TXT ("${content}")`
+  }
+
+  formatPrefix(prefix, ttl) {
+    const output = []
+
+    if (prefix) {
+      output.push(prefix)
+    }
+    else {
+      output.push('@')
+    }
+
+    if (ttl) {
+      output.push(ttl)
+    }
+
+    return output.join(' ')
   }
 
   recordTypeDispatch(record) {
-    // Make a copy of the record, so we don't modify the original.
-    let copy = Object.assign(record)
-
-    // Coerce optional values to strings.
-    copy.prefix = this.str(copy.prefix)
-    copy.ttl = this.str(copy.ttl)
-
-    if (copy.record_type === 'A') {
-      return this.A(copy.prefix, copy.ttl, copy.address)
+    if (record.record_type === 'A') {
+      return this.A(record.prefix, record.ttl, record.address)
     }
-    else if (copy.record_type === 'AAAA') {
-      return this.AAAA(copy.prefix, copy.ttl, copy.address)
+    else if (record.record_type === 'AAAA') {
+      return this.AAAA(record.prefix, record.ttl, record.address)
     }
-    else if (copy.record_type === 'CNAME') {
-      return this.CNAME(copy.prefix, copy.ttl, copy.name)
+    else if (record.record_type === 'CNAME') {
+      return this.CNAME(record.prefix, record.ttl, record.name)
     }
-    else if (copy.record_type === 'MX') {
-      return this.MX(copy.prefix, copy.ttl, copy.priority, copy.name)
+    else if (record.record_type === 'MX') {
+      return this.MX(record.prefix, record.ttl, record.priority, record.name)
     }
-    else if (copy.record_type === 'NS') {
-      return this.NS(copy.prefix, copy.ttl, copy.name)
+    else if (record.record_type === 'NS') {
+      return this.NS(record.prefix, record.ttl, record.name)
     }
-    else if (copy.record_type === 'SOA') {
-      return this.SOA(copy.primary_server, copy.responsible_person, copy.serial, copy.refresh, copy.retry, copy.expire, copy.minimum_ttl)
+    else if (record.record_type === 'SOA') {
+      return this.SOA(record.primary_server, record.responsible_person, record.serial, record.refresh, record.retry, record.expire, record.minimum_ttl)
     }
-    else if (copy.record_type === 'SRV') {
-      return this.SRV(copy.prefix, copy.ttl, copy.weight, copy.priority, copy.port, copy.name)
+    else if (record.record_type === 'SRV') {
+      return this.SRV(record.prefix, record.ttl, record.weight, record.priority, record.port, record.name)
     }
-    else if (copy.record_type === 'TXT') {
-      return this.TXT(copy.prefix, copy.ttl, copy.text_content)
+    else if (record.record_type === 'TXT') {
+      return this.TXT(record.prefix, record.ttl, record.text_content)
     }
     else {
-      throw new Error('EDZIFCONVERR-001: No renderer found for record type ' + copy.record_type)
+      throw new Error('EDZIFCONVERR-001: No renderer found for record type ' + record.record_type)
     }
   }
 }
