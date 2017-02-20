@@ -1,11 +1,11 @@
 'use strict'
 
 class GenericZoneFileZoneConverter {
-  constructor(recordConverter) {
+  constructor (recordConverter) {
     this.recordConverter = recordConverter
   }
 
-  generate(zone) {
+  generate (zone) {
     const contents = []
 
     if (zone.records) {

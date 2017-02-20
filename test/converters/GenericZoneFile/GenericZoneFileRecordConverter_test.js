@@ -148,7 +148,7 @@ lab.experiment('GenericZoneFile recordsTypeDispatch rendering', () => {
     }
 
     try {
-      const output = converter.recordTypeDispatch(record)
+      converter.recordTypeDispatch(record)
 
       Code.fail('Rendering invalid types should throw an error.')
     } catch (e) {
