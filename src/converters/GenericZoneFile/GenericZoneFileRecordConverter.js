@@ -34,7 +34,7 @@ class GenericZoneFileRecordConverter {
   }
 
   TXT(prefix, ttl, content) {
-    return `${this.formatPrefix(prefix, ttl)} IN TXT ("${content}")`
+    return `${this.formatPrefix(prefix, ttl)} IN TXT (${this.formatTXTContent(content)})`
   }
 
   formatPrefix(prefix, ttl) {
@@ -52,6 +52,26 @@ class GenericZoneFileRecordConverter {
     }
 
     return output.join(' ')
+  }
+
+  formatTXTContent(content) {
+    // Remove all characters that are not printable ASCII.
+    let escapedText = content.replace(/[^\x20-\x7E]+/g, '')
+
+    // Escape backslashes.
+    escapedText = escapedText.replace(/\\/g, '\\\\')
+
+    // Escape backticks.
+    escapedText = escapedText.replace(/`/g, '``')
+
+    // Escape quotes.
+    escapedText = escapedText.replace(/"/g, '\\"')
+
+    // Now we need chunking, since there's a 255 character limit on TXT field values.
+    // See http://serverfault.com/a/255676/766
+    const chunks = escapedText.match(/.{1,250}/g)
+
+    return '"' + chunks.join('" "') + '"'
   }
 
   recordTypeDispatch(record) {

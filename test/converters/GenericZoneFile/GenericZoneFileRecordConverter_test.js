@@ -79,6 +79,47 @@ lab.experiment('GenericZoneFile records conversion', () => {
     Code.expect(output).to.equal('@ 86400 IN TXT ("v=spf1 mx -all")')
     done()
   })
+
+  lab.test('TXT record (long DMARC signature)', (done) => {
+    const output = converter.TXT('mail._domainkey', null, 'v=DKIM1; k=rsa; s=email; p=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaa+blazzlefrozzleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaa+aaaaaaaaa')
+
+    Code.expect(output).to.be.a.string()
+    // Tests that our chunking works correctly.
+    Code.expect(output).to.equal('mail._domainkey IN TXT ("v=DKIM1; k=rsa; s=email; p=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaa+blazzlefrozzleaaaaaaaaaaaaaaaaaaaaaa" "aaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaaaaaaaaaaaaaaaaaaaaaaa+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/aaaa+aaaaaaaaa")')
+    done()
+  })
+
+  lab.test('TXT record (non-ASCII)', (done) => {
+    const output = converter.TXT('food', 6300, 'crispy=flæskesvær; greasy=bøfsandwich; common=🍔')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('food 6300 IN TXT ("crispy=flskesvr; greasy=bfsandwich; common=")')
+    done()
+  })
+
+  lab.test('TXT record (backslash escape)', (done) => {
+    const output = converter.TXT('backslash', 4930, 'test\\')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('backslash 4930 IN TXT ("test\\\\")')
+    done()
+  })
+
+  lab.test('TXT record (backtick escape)', (done) => {
+    const output = converter.TXT('backtick', 1444, 'new`test')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('backtick 1444 IN TXT ("new``test")')
+    done()
+  })
+
+  lab.test('TXT record (quote escape)', (done) => {
+    const output = converter.TXT('quote', 1984, 'new"test')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('quote 1984 IN TXT ("new\\"test")')
+    done()
+  })
 })
 
 lab.experiment('GenericZoneFile recordsTypeDispatch rendering', () => {
