@@ -23,6 +23,15 @@ class GenericZoneFileZoneConverter {
 
     return output
   }
+
+  generateMultiple (zones) {
+    const output = {}
+
+    for (let zone of zones) {
+      output[zone.name] = this.generate(zone)
+    }
+
+    return output
   }
 }
 

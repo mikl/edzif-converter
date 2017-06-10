@@ -27,4 +27,17 @@ lab.experiment('GenericZoneFile zone conversion', () => {
     Code.expect(output).to.include('_dmarc 43200 IN TXT ("v=DMARC1; p=reject")')
     done()
   })
+
+  lab.test('Multiple valid zones', (done) => {
+    const zones = require('../../fixtures/multiple_valid_zones')
+    const output = converter.generateMultiple(zones)
+
+    console.log(output['example.com'])
+
+    Code.expect(output).to.be.an.object()
+    Code.expect(output).to.have.length(3)
+    Code.expect(output['example.com']).to.include('www 43200 CNAME example.com\n')
+    Code.expect(output['example.net']).to.include('300 IN A 192.168.1.38\n')
+    done()
+  })
 })
