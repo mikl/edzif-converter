@@ -14,7 +14,15 @@ class GenericZoneFileZoneConverter {
       }
     }
 
-    return contents.join('\n')
+    let output = contents.join('\n')
+
+    // If we have output, be sure to end the file with a linebreak.
+    if (output) {
+      output += '\n'
+    }
+
+    return output
+  }
   }
 }
 
