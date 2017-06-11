@@ -4,4 +4,4 @@ machine:
 test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/lab
-    - npm run test -- --output $CIRCLE_TEST_REPORTS/junit/test-results.xml --reporter junit
+    - npm run test -- --output $CIRCLE_TEST_REPORTS/lab/junit.xml --reporter junit
