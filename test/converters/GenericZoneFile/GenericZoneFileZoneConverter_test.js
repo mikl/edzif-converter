@@ -41,8 +41,6 @@ lab.experiment('GenericZoneFile zone conversion', () => {
     const zones = require('../../fixtures/multiple_valid_zones')
     const output = converter.generateMultiple(zones)
 
-    console.log(output['example.com'])
-
     Code.expect(output).to.be.an.object()
     Code.expect(output).to.have.length(3)
     Code.expect(output['example.com']).to.include('www 43200 CNAME example.com\n')
