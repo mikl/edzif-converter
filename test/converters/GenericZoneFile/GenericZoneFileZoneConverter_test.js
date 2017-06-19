@@ -28,6 +28,15 @@ lab.experiment('GenericZoneFile zone conversion', () => {
     done()
   })
 
+  lab.test('File name generation', (done) => {
+    const validZone = require('../../fixtures/zone_full_valid')
+    const output = converter.generateFileName(validZone)
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.only.include('example.com.zone')
+    done()
+  })
+
   lab.test('Multiple valid zones', (done) => {
     const zones = require('../../fixtures/multiple_valid_zones')
     const output = converter.generateMultiple(zones)

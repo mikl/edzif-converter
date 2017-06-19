@@ -24,6 +24,10 @@ class GenericZoneFileZoneConverter {
     return output
   }
 
+  generateFileName (zone) {
+    return `${zone.name}.zone`
+  }
+
   generateMultiple (zones) {
     const output = {}
 
