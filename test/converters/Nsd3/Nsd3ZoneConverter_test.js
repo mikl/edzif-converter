@@ -8,15 +8,6 @@ const { getZoneConverter } = require('../../../src/converters/Nsd3')
 lab.experiment('NSD3 zone conversion', () => {
   const converter = getZoneConverter()
 
-  lab.test('Empty zone', (done) => {
-    const emptyZone = {}
-    const output = converter.generate(emptyZone)
-
-    Code.expect(output).to.be.a.string()
-    Code.expect(output).to.equal('')
-    done()
-  })
-
   lab.test('Full valid zone', (done) => {
     const validZone = require('../../fixtures/zone_full_valid')
     const output = converter.generate(validZone)

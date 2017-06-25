@@ -2,6 +2,23 @@ const GenericZoneFileZoneConverter = require('../GenericZoneFile/GenericZoneFile
 
 class Nsd3ZoneConverter extends GenericZoneFileZoneConverter {
   /**
+   * Generate zone file.
+   *
+   * @param {object} zone
+   *
+   * @return {string}
+   */
+  generate (zone) {
+    const header = `
+;## FORWARD Zone -
+
+$ORIGIN ${zone.name}.
+$TTL 86400
+`
+    return [header, super.generate(zone)].join('\n')
+  }
+
+  /**
    * Generate config file fragment for NSD3.
    *
    * @param {array} zones
