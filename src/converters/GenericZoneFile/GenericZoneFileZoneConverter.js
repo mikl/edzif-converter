@@ -5,6 +5,13 @@ class GenericZoneFileZoneConverter {
     this.recordConverter = recordConverter
   }
 
+  /**
+   * Generate zone file.
+   *
+   * @param {object} zone
+   *
+   * @return {string}
+   */
   generate (zone) {
     const contents = []
 
