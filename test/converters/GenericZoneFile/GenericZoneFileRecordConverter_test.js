@@ -57,10 +57,10 @@ lab.experiment('GenericZoneFile records conversion', () => {
   })
 
   lab.test('SOA record (example)', (done) => {
-    const output = converter.SOA('ns1.example.net', 'admin.example.net', 1486414023, 3600, 7200, 864000, 3600)
+    const output = converter.SOA(null, 'ns1.example.net', 'admin.example.net', 1486414023, 3600, 7200, 864000, 3600)
 
     Code.expect(output).to.be.a.string()
-    Code.expect(output).to.equal('ns1.example.net IN SOA admin.example.net (1486414023 3600 7200 864000 3600)')
+    Code.expect(output).to.equal('@ IN SOA ns1.example.net admin.example.net (1486414023 3600 7200 864000 3600)')
     done()
   })
 
@@ -155,5 +155,33 @@ lab.experiment('GenericZoneFile recordsTypeDispatch rendering', () => {
       Code.expect(e.message).to.startWith('EDZIFCONVERR-001')
       done()
     }
+  })
+})
+
+lab.experiment('GenericZoneFile records conversion (with absolutifyHostnames option)', () => {
+  const converter = new RecordConverter({ absolutifyHostnames: true })
+
+  lab.test('CNAME record (empty hostname)', (done) => {
+    const output = converter.CNAME('', 43200, '')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('@ 43200 CNAME .')
+    done()
+  })
+
+  lab.test('CNAME record (www to self)', (done) => {
+    const output = converter.CNAME('www', 43200, '@')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('www 43200 CNAME @')
+    done()
+  })
+
+  lab.test('CNAME record (www)', (done) => {
+    const output = converter.CNAME('www', 43200, 'example.net')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('www 43200 CNAME example.net.')
+    done()
   })
 })

@@ -1,8 +1,16 @@
 'use strict'
 
+const defaultOptions = {
+  absolutifyHostnames: false
+}
+
+// Check if a hostname is absolute.
+// Absolute hostnames end in @ or .
+const absoluteHostNameTester = /[@.]$/
+
 class GenericZoneFileRecordConverter {
-  constructor (recordPartConverter) {
-    this.recordPartConverter = recordPartConverter
+  constructor (options = {}) {
+    this.options = Object.assign({}, defaultOptions, options)
   }
 
   A (prefix, ttl, address) {
@@ -14,23 +22,23 @@ class GenericZoneFileRecordConverter {
   }
 
   CNAME (prefix, ttl, hostname) {
-    return `${this.formatPrefix(prefix, ttl)} CNAME ${hostname}`
+    return `${this.formatPrefix(prefix, ttl)} CNAME ${this.hostname(hostname)}`
   }
 
   MX (prefix, ttl, priority, hostname) {
-    return `${this.formatPrefix(prefix, ttl)} MX ${priority} ${hostname}`
+    return `${this.formatPrefix(prefix, ttl)} MX ${priority} ${this.hostname(hostname)}`
   }
 
   NS (prefix, ttl, hostname) {
-    return `${this.formatPrefix(prefix, ttl)} IN NS ${hostname}`
+    return `${this.formatPrefix(prefix, ttl)} IN NS ${this.hostname(hostname)}`
   }
 
-  SOA (primaryServer, responsiblePerson, serial, refresh, retry, expire, minimumTtl) {
-    return `${primaryServer} IN SOA ${responsiblePerson} (${serial} ${refresh} ${retry} ${expire} ${minimumTtl})`
+  SOA (prefix, primaryServer, responsiblePerson, serial, refresh, retry, expire, minimumTtl) {
+    return `${this.formatPrefix(prefix)} IN SOA ${this.hostname(primaryServer)} ${this.hostname(responsiblePerson)} (${serial} ${refresh} ${retry} ${expire} ${minimumTtl})`
   }
 
   SRV (prefix, ttl, weight, priority, port, hostname) {
-    return `${this.formatPrefix(prefix, ttl)} IN SRV ${weight} ${priority} ${port} ${hostname}`
+    return `${this.formatPrefix(prefix, ttl)} IN SRV ${weight} ${priority} ${port} ${this.hostname(hostname)}`
   }
 
   TXT (prefix, ttl, content) {
@@ -73,6 +81,23 @@ class GenericZoneFileRecordConverter {
     return '"' + chunks.join('" "') + '"'
   }
 
+  hostname (hostname) {
+    // Make sure we have a string, even if it's empty.
+    let output = (hostname ? hostname + '' : '')
+
+    // Trim off any spaces.
+    output = output.trim()
+
+    if (this.options.absolutifyHostnames) {
+      // If hostname is not absolute, add a . at the end to make so.
+      if (!absoluteHostNameTester.test(output)) {
+        output += '.'
+      }
+    }
+
+    return output
+  }
+
   recordTypeDispatch (record) {
     if (record.record_type === 'A') {
       return this.A(record.prefix, record.ttl, record.address)
@@ -85,7 +110,7 @@ class GenericZoneFileRecordConverter {
     } else if (record.record_type === 'NS') {
       return this.NS(record.prefix, record.ttl, record.name)
     } else if (record.record_type === 'SOA') {
-      return this.SOA(record.primary_server, record.responsible_person, record.serial, record.refresh, record.retry, record.expire, record.minimum_ttl)
+      return this.SOA(record.prefix, record.primary_server, record.responsible_person, record.serial, record.refresh, record.retry, record.expire, record.minimum_ttl)
     } else if (record.record_type === 'SRV') {
       return this.SRV(record.prefix, record.ttl, record.weight, record.priority, record.port, record.name)
     } else if (record.record_type === 'TXT') {
