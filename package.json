@@ -1,6 +1,6 @@
 {
   "name": "edzif-converter",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "Library to format DNS zones in EDZIF format into formats usable with other systems.",
   "main": "index.js",
   "scripts": {
