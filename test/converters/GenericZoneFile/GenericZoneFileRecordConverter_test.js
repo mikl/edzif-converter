@@ -8,6 +8,14 @@ const RecordConverter = require('../../../src/converters/GenericZoneFile/Generic
 lab.experiment('GenericZoneFile records conversion', () => {
   const converter = new RecordConverter()
 
+  lab.test('A record (root)', (done) => {
+    const output = converter.A('@', 8888, '192.168.1.12')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('@ 8888 IN A 192.168.1.12')
+    done()
+  })
+
   lab.test('A record (localhost)', (done) => {
     const output = converter.A('localhost', 43200, '127.0.0.1')
 
@@ -24,6 +32,22 @@ lab.experiment('GenericZoneFile records conversion', () => {
     done()
   })
 
+  lab.test('A record (no prefix)', (done) => {
+    const output = converter.A(null, 1337, '192.168.1.1')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('@ 1337 IN A 192.168.1.1')
+    done()
+  })
+
+  lab.test('AAAA record (root)', (done) => {
+    const output = converter.AAAA('@', 3604, '2001:0db8:0000:0000:0000:ff00:0042:8329')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('@ 3604 IN AAAA 2001:0db8:0000:0000:0000:ff00:0042:8329')
+    done()
+  })
+
   lab.test('AAAA record (localhost)', (done) => {
     const output = converter.AAAA('localhost', 43200, '2001:db8::ff00:42:8329')
 
@@ -37,6 +61,22 @@ lab.experiment('GenericZoneFile records conversion', () => {
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('www 43200 CNAME example.net')
+    done()
+  })
+
+  lab.test('CNAME record (*)', (done) => {
+    const output = converter.CNAME('*', null, 'example.net')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('* CNAME example.net')
+    done()
+  })
+
+  lab.test('CNAME record (@)', (done) => {
+    const output = converter.CNAME('self', 7200, '@')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('self 7200 CNAME @')
     done()
   })
 
@@ -69,6 +109,14 @@ lab.experiment('GenericZoneFile records conversion', () => {
 
     Code.expect(output).to.be.a.string()
     Code.expect(output).to.equal('_imap._tcp.example.net. 86400 IN SRV 1 10 143 imap.example.net.')
+    done()
+  })
+
+  lab.test('SRV record (SIP)', (done) => {
+    const output = converter.SRV('_sip._tcp.example.net.', 86400, 1, 10, 5060, 'sipserver.example.com')
+
+    Code.expect(output).to.be.a.string()
+    Code.expect(output).to.equal('_sip._tcp.example.net. 86400 IN SRV 1 10 5060 sipserver.example.com')
     done()
   })
 
