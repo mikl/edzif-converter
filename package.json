@@ -27,10 +27,10 @@
     "code": "^4.1.0",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "lab": "^14.2.2",
-    "nodemon": "^1.12.0",
+    "lab": "^14.3.2",
+    "nodemon": "^1.14.11",
     "standard": "^10.0.3"
   }
 }
